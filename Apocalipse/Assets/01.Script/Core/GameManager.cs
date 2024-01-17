@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     static public GameManager Instance;
 
     public CharacterManager CharacterManager;
+    public MapManager MapManager;
 
     [HideInInspector] public bool bStageCleared = false;
 
@@ -30,6 +31,8 @@ public class GameManager : MonoBehaviour
     {
         if (CharacterManager == null) { return; }
             CharacterManager.Init(this);
+
+        MapManager.Init(this);
     }
 
     public void GameStart()
