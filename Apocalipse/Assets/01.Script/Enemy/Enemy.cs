@@ -22,16 +22,16 @@ public class Enemy : BaseCharacter
     {
         if (!bIsDead)
         {
-            //GameManager.Instance.EnemyDies();
+            GameManager.Instance.EnemyDies();
 
-            //if (!bMustSpawnItem)
-            //    GameManager.Instance.ItemManager.SpawnRandomItem(0, 3, transform.position);
-            //else
-            //    GameManager.Instance.ItemManager.SpawnRandomItem(transform.position);
+            if (!bMustSpawnItem)
+                GameManager.Instance.ItemManager.SpawnRandomItem(0, 3, transform.position);
+            else
+                GameManager.Instance.ItemManager.SpawnRandomItem(transform.position);
 
             bIsDead = true;
 
-            //Instantiate(ExplodeFX, transform.position, Quaternion.identity);
+            Instantiate(ExplodeFX, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

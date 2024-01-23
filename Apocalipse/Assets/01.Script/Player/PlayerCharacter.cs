@@ -109,4 +109,49 @@ public class PlayerCharacter : BaseCharacter
             //}
         }
     }
+
+    public void SetInvincibility(bool invin)
+    {
+        if (invin)
+        {
+            if (invincibilityCoroutine != null)
+            {
+                StopCoroutine(invincibilityCoroutine);
+            }
+
+            invincibilityCoroutine = StartCoroutine(InvincibilityCoroutine());
+        }
+    }
+
+    private IEnumerator InvincibilityCoroutine()
+    {
+        Invincibility = true;
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // 무적 지속 시간 (초)
+        float invincibilityDuration = 3f;
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+
+        // 무적이 해제될 때까지 대기
+        yield return new WaitForSeconds(invincibilityDuration);
+
+        // 타이머가 만료되면 무적을 비활성화
+        Invincibility = false;
+        spriteRenderer.color = new Color(1, 1, 1, 1f);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Item"))
+        {
+            BaseItem item = collision.gameObject.GetComponent<BaseItem>();
+            if (item != null)
+            {
+                item.OnGetItem(CharacterManager);
+                Destroy(collision.gameObject);
+                //GameManager.Instance.SoundManager.PlaySFX("GetItem");
+            }
+        }
+    }
+
 }

@@ -62,9 +62,6 @@ public class PlayerHPSystem : MonoBehaviour
             {
                 Health = MaxHealth;
             }
-
-            //GameManager.Instance.SoundManager.PlaySFX("GetItem");
-            Destroy(collision.gameObject);
         }
 
         GameInstance.instance.CurrentPlayerHP = Health;

@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     public CharacterManager CharacterManager;
     public MapManager MapManager;
+    public EnemySpawnManager EnemySpawnManager;
+    public ItemManager ItemManager;
 
     [HideInInspector] public bool bStageCleared = false;
 
@@ -33,10 +35,16 @@ public class GameManager : MonoBehaviour
             CharacterManager.Init(this);
 
         MapManager.Init(this);
+        EnemySpawnManager.Init(this);
     }
 
     public void GameStart()
     {
         SceneManager.LoadScene("Stage1");
+    }
+    
+    public void EnemyDies()
+    {
+
     }
 }
