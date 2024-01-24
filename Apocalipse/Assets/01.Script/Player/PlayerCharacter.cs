@@ -31,10 +31,22 @@ public class PlayerCharacter : BaseCharacter
     public int MaxWeaponLevel = 3;
     #endregion
 
+    #region AddOn
+    public Transform[] AddOnTransform;
+    public GameObject AddOnPrefab;
+    [HideInInspector] public int MaxAddOnCount = 2;
+    #endregion
+
     public override void Init(CharacterManager characterManager)
     {
         base.Init(characterManager);
         InitializeSkills();
+
+        for(int i = 0; i < GameInstance.instance.CurrentPlayerAddOnCount; i++)
+        {
+            Transform spawnTransform = AddOnTransform[i];
+            AddOnItem.SpawnAddOn(spawnTransform.position, AddOnPrefab, spawnTransform);
+        }
     }
 
     public void DeadProcess()

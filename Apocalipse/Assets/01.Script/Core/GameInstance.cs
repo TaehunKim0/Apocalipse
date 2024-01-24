@@ -15,6 +15,7 @@ public class GameInstance : MonoBehaviour
     public int CurrentPlayerWeaponLevel = 0;
     public int CurrentPlayerHP = 3;
     public float CurrentPlayerFuel = 100f;
+    public int CurrentPlayerAddOnCount = 0;
 
     private void Awake()
     {
