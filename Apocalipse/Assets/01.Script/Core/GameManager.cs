@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
     public EnemySpawnManager EnemySpawnManager;
     public ItemManager ItemManager;
 
+    public Canvas StageResultCanvas;
+    public TMP_Text CurrentScoreText;
+    public TMP_Text TimeText;
+
     [HideInInspector] public bool bStageCleared = false;
 
     private void Awake()  // 객체 생성시 최초 실행 (그래서 싱글톤을 여기서 생성)
@@ -45,6 +49,95 @@ public class GameManager : MonoBehaviour
     
     public void EnemyDies()
     {
+        AddScore(10);
+    }
 
+    public void StageClear()
+    {
+        AddScore(500);
+
+        float gameStartTime = GameInstance.instance.GameStartTime;
+        int score = GameInstance.instance.Score;
+
+        // 걸린 시간
+        int elapsedTime = Mathf.FloorToInt(Time.time - gameStartTime);
+
+        // 스테이지 클리어 결과창 : 점수, 시간
+        StageResultCanvas.gameObject.SetActive(true);
+        CurrentScoreText.text = "CurrentScore : " + score;
+        TimeText.text = "ElapsedTime : " + elapsedTime;
+
+        bStageCleared = true;
+
+        // 5초 뒤에 다음 스테이지
+        StartCoroutine(LoadNextStageAfterDelay(5f));
+    }
+
+    IEnumerator LoadNextStageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        switch(GameInstance.instance.CurrentStageLevel)
+        {
+            case 1:
+                SceneManager.LoadScene("Stage2");
+                GameInstance.instance.CurrentStageLevel = 2;
+                break;
+
+            case 2:
+                SceneManager.LoadScene("Result");
+                break;
+        }
+    }
+
+    public void AddScore(int score)
+    {
+        GameInstance.instance.Score += score;
+    }
+
+    private void Update()
+    {
+        // 맵 내에 모든 적 유닛 제거.
+        if (Input.GetKeyUp(KeyCode.F1))
+        {
+            // 모든 Enemy 찾기
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject obj in enemies)
+            {
+                Enemy enemy = obj?.GetComponent<Enemy>();
+                enemy?.Dead();
+            }
+        }
+
+        // 공격 업그레이드를 최고 단계로 상승
+        if (Input.GetKeyUp(KeyCode.F2))
+        {
+            GetPlayerCharacter().CurrentWeaponLevel = 3;
+            GameInstance.instance.CurrentPlayerWeaponLevel = GetPlayerCharacter().CurrentWeaponLevel;
+        }
+
+        // 스킬의 쿨타임 및 횟수를 초기화 시킨다
+        if (Input.GetKeyUp(KeyCode.F3))
+        {
+            GetPlayerCharacter().InitSkillCoolDown();
+        }
+
+        // 내구도 초기화
+        if (Input.GetKeyUp(KeyCode.F4))
+        {
+            GetPlayerCharacter().GetComponent<PlayerHPSystem>().InitHealth();
+        }
+
+        // 연료 초기화
+        if (Input.GetKeyUp(KeyCode.F5))
+        {
+            GetPlayerCharacter().GetComponent<PlayerFuelSystem>().InitFuel();
+        }
+
+        // 스테이지 클리어
+        if (Input.GetKeyUp(KeyCode.F6))
+        {
+            StageClear();
+        }
     }
 }

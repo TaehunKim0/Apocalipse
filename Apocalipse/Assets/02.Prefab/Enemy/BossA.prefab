@@ -66,7 +66,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9091321892364792947, guid: 7edd3381c29036d4588664dfd98e72ee, type: 3}
       propertyPath: Health
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9091321892364792947, guid: 7edd3381c29036d4588664dfd98e72ee, type: 3}
       propertyPath: bMustSpawnItem
